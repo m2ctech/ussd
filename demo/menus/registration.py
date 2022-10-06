@@ -68,10 +68,10 @@ class RegistrationMenu(Menu):
                 "data": f"{{\"user_id\":\"{id}\",\"expiry_date\":\"{id_exp}\",\"surname\":\"{lastname}\",\"firstname\":\"{first_name}\"}}"
             }
 
-            response = request.post(validate_omang_details, json=payload)
-            r = response.json()
+            #response = request.post(validate_omang_details, json=payload)
+            #r = response.json()
 
-            if r.response.success:
+            if True:# r.response.success:
                 menu_text = "You have successfully registered, thank you"
                 send_sms().sending(self.phone_number)
                 return self.ussd_end(menu_text)
