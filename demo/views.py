@@ -14,8 +14,8 @@ from .menus.home import LowerLevelMenu
 from .menus.registration import RegistrationMenu
 
 headers = {"Content-type": "application/json"}
-userurl = "http://localhost:3000/users"
-urlusers = "https://accdev.gov.bw/v1/functions/62ea0b812a1c3ca93ab9/executions"
+
+
 
 @csrf_exempt
 def index(request):
@@ -27,10 +27,6 @@ def index(request):
     service_code = request.POST.get('serviceCode')
     phone_number = request.POST.get('phoneNumber')
     text = request.POST.get('text')
-
-    response = requests.get(urlusers)
-    users = response.json()
-    print(users) 
 
     
     text_array = text.split("*")
