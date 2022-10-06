@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-xsgvbhmge0$i=^o8=w^g%-p^57$=7wp9nn(cy*d+d958@@y)eq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ussd-1gov.herokuapp.com']
+ALLOWED_HOSTS = ['ebd5-168-167-254-250.eu.ngrok.io']
 
 
 # Application definition
@@ -54,13 +54,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CACHES = {
+"""CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": ["redis-19786.c1.asia-northeast1-1.gce.cloud.redislabs.com:19786" ,"redis://127.0.0.1:6379/1"],
+        "LOCATION": "redis://127.0.0.1:6379/1", #"redis-19786.c1.asia-northeast1-1.gce.cloud.redislabs.com:19786",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
+    }
+}"""
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'ussd_cache_table',
     }
 }
 
