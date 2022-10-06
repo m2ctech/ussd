@@ -59,6 +59,6 @@ def index(request):
     
 
     
-    response = ("END nothing here", 200)
+  response = ("END nothing here", 200)
     
-    return HttpResponse(response, content_type='text/plain')
+  return HttpResponse(response, content_type='text/plain')
