@@ -57,7 +57,7 @@ MIDDLEWARE = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": ["redis-19786.c1.asia-northeast1-1.gce.cloud.redislabs.com:19786" ,"redis://127.0.0.1:6379/1"],
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
