@@ -52,9 +52,13 @@ def index(request):
                        user_response=user_response,level=level)
         return menu.execute()
 
-    
+          
+    response = ("END nothing here", 200)
+      
+    return HttpResponse(response, content_type='text/plain')
+  
+  elif request.method == 'GET':
+    response = ("USSD LIVE ", 200)
+    return HttpResponse(response, content_type='text/plain')
 
-    
-  response = ("END nothing here", 200)
-    
-  return HttpResponse(response, content_type='text/plain')
+ 
