@@ -74,7 +74,7 @@ class RegistrationMenu(Menu):
                 "data": f"{{\"user_id\":\"{id}\",\"expiry_date\":\"{id_exp}\",\"surname\":\"{lastname}\",\"firstname\":\"{first_name}\"}}"
             }
 
-            response = request.post(validate_omang_details, headers=head, json=payload)
+            response = requests.post(validate_omang_details, headers=head, json=payload)
             r = response.json()
             print(r)
 
