@@ -3,6 +3,7 @@ from .base_menu import Menu
 from ..utils import verify_username,verify_id
 from ..send_sms import send_sms
 import requests
+import json
 
 validate_omang_details = "https://crm.gov.bw/v1/functions/62fcb3f7a138ce17d8f1/executions"
 
@@ -75,10 +76,14 @@ class RegistrationMenu(Menu):
             }
 
             response = requests.post(validate_omang_details, headers=head, json=payload)
+            
             r = response.json()
-            print(r)
 
-            if r.response.success:
+            data = r["response"]
+            response = json.loads(data)
+
+
+            if response["success"]:
                 menu_text = "You have successfully registered, thank you"
                 send_sms().sending(self.phone_number)
                 return self.ussd_end(menu_text)
