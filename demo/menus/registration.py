@@ -155,7 +155,7 @@ class RegistrationMenu(Menu):
             if response["message"]:
                 #CREATE PROFILE CODE GOES HERE
                 try:
-                    result = users.create(f'{id}', f'{id}@1gov.bw', f'{first_name}', f'{user_password}')
+                    result = users.create(f'{id}', f'{id}@1gov.bw', None, f'{user_password}', f'{first_name}')
                     print(result)
                     menu_text = "You have successfully registered, thank you"
                     send_sms().sending(self.phone_number,first_name,id)
