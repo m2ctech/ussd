@@ -52,7 +52,7 @@ class RegistrationMenu(Menu):
 
             response = requests.post(get_user, headers=head, json=payload)
             r = response.json()
-            if r["success"] == "true":
+            if r["payload"]:
                 menu_text = "Already registered"
                 return self.ussd_end(menu_text)
             else:
@@ -137,6 +137,7 @@ class RegistrationMenu(Menu):
             id = self.session.get("id")
             id_exp = self.session.get("idexp")
             first_name = self.session.get("fname")
+            first_name = first_name.capitalize()
             lastname = self.session.get("lname")
 
             payload = {
