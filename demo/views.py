@@ -37,7 +37,7 @@ def index(request):
     if cache.get(session_id):
       session = cache.get(session_id)
     else:
-      session = {"level":0, "session_id":session_id, "id": "default", "idexp": "default", "fname":"default", "lname":"default"}
+      session = {"level":0, "session_id":session_id, "id": "default", "idexp": "default", "fname":"default", "lname":"default", "password":"default"}
       cache.set(session_id, session)
 
     level = session.get("level")

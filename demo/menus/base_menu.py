@@ -34,7 +34,7 @@ class Menu(object):
 
     def home(self):
         """serves the home menu"""
-        menu_text = "Welcome to 1Gov,\n Choose a service\n"
+        menu_text = "Welcome to 1Gov,\n Choose an option\n"
 
         #menu_text += " 1. Register\n"
         menu_text += " 1. Citizen Registration\n"

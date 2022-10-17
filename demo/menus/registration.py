@@ -1,17 +1,38 @@
 from urllib import request
 from .base_menu import Menu
-from ..utils import verify_username,verify_id
+from ..utils import verify_username,verify_id, verify_omang_expiry, validate_password, unique_lastname
 from ..send_sms import send_sms
 import requests
 import json
 
+from appwrite.client import Client, AppwriteException
+from appwrite.services.account import Account
+from appwrite.services.users import Users
+from appwrite.id import ID
+
 validate_omang_details = "https://crm.gov.bw/v1/functions/62fcb3f7a138ce17d8f1/executions"
+get_user = "http://crmportal.gov.bw:4000/profile/get"
 
 
 project = "6228825d967b029b65cb"
 key = "3edae4867e4bb64183f83348c3378423cfd31ebeb5e76c0505fc839bf848682f8de6fa434175ead160fe6fe8730bb383b4a468031602755a4fb1818f371da18ad14039de279d2e74558233a3ed7a6aef66ce08394c48af7c23b46017643a33ad4209f1d0de306070c33207072be40e08365247bedc47e23f1235473a6e52075b"
 
 head = {'X-Appwrite-Project': project, 'X-Appwrite-key':key}
+
+
+
+client = Client()
+account = Account(client)
+
+(client
+  .set_endpoint('https://crmportal.gov.bw/v1/account') # Your API Endpoint
+  .set_project('6228825d967b029b65cb') # Your project ID
+  .set_key('ebf9fcc6cc0e5723fe3d2f795337ba0398577fdc2c56e28c7144ddce40f5e9850a9df1d45e112a845debc6e0801422451a8b5279d05160bc789c8571a3d4ad6a9f2649a2331d6efbd79d87dcf5148c4cc8a922ded779eaced41c15099824897af40e936cc1d233c3eed4a78c187f60f8bcb5e6364e6be68dab85312560897730') # Your secret API key
+)
+
+
+
+
 
 class RegistrationMenu(Menu):
     """Serves registration callbacks"""
@@ -22,8 +43,20 @@ class RegistrationMenu(Menu):
 
         if verify_id(self.user_response):
             self.session["id"] = self.user_response
-            menu_text = "Enter your omang expiry date: yyyy-mm-dd"
-            return self.ussd_proceed(menu_text)
+
+
+            payload = {
+                "username": f"{self.user_response}"
+            }
+
+            response = requests.post(get_user, headers=head, json=payload)
+            r = response.json()
+            if r["success"] == "true":
+                menu_text = "Already registered"
+                return self.ussd_end(menu_text)
+            else:
+                menu_text = "Enter your omang expiry date: yyyy-mm-dd"
+                return self.ussd_proceed(menu_text)
         else:
             menu_text = "Invalid Input"
             return self.ussd_end(menu_text)
@@ -39,11 +72,16 @@ class RegistrationMenu(Menu):
         #menu_text = verify_id(self.user_response)
 
         self.session["level"] = 52
-        self.session["idexp"] = self.user_response
 
-        menu_text = "Enter your first name"
+        if verify_omang_expiry(self.user_response):
+            self.session["idexp"] = self.user_response
 
-        return self.ussd_proceed(menu_text)
+            menu_text = "Enter your first name"
+
+            return self.ussd_proceed(menu_text)
+        else:
+            menu_text = "Invalid Input"
+            return self.ussd_end(menu_text)
         
 
     def get_lastname(self):
@@ -59,12 +97,42 @@ class RegistrationMenu(Menu):
             menu_text = "Invalid Input"
             return self.ussd_end(menu_text)
 
+
+    def get_password(self):
+        self.session["level"] = 54
+
+        if verify_username(self.user_response) or unique_lastname(self.user_response):
+            self.session["lname"] = self.user_response
+            menu_text = "NB: Create a strong password \n Enter your password"
+            return self.ussd_proceed(menu_text)
+
+        else:
+            menu_text = "Invalid Input"
+            return self.ussd_end(menu_text)
+
+
+    def get_verify_password(self):
+        
+        menu_text = validate_password(self.user_response)
+
+        if "must" in menu_text:
+            return self.ussd_proceed(menu_text)
+        elif "Invalid" in menu_text:
+            return self.ussd_end(menu_text)
+        else:
+            #session
+            self.session["level"] = 55
+            self.session["password"] = self.user_response
+            return self.send_message()
+
+
+
     def send_message(self):
         # insert user's phone number
+        user_password = self.session.get("password")
 
 
-        if verify_username(self.user_response):
-            self.session["lname"] = self.user_response
+        if self.user_response == user_password:
             id = self.session.get("id")
             id_exp = self.session.get("idexp")
             first_name = self.session.get("fname")
@@ -83,17 +151,28 @@ class RegistrationMenu(Menu):
             response = json.loads(data)
 
 
-            if response["success"]:
-                menu_text = "You have successfully registered, thank you"
-                send_sms().sending(self.phone_number)
-                return self.ussd_end(menu_text)
+            if response["message"]:
+                #CREATE PROFILE CODE GOES HERE
+                try:
+                    result = account.create(f'{id}', f'{id}@1gov.bw', f'{user_password}')
+                    print(result)
+                    menu_text = "You have successfully registered, thank you"
+                    send_sms().sending(self.phone_number,first_name,id)
+                    return self.ussd_end(menu_text)
+                except AppwriteException as e:
+                    print(e.message)
+                    menu_text = e.message
+                    return self.ussd_end(menu_text)
+                    
+
+                
             else:
                 menu_text = "Invalid Credentials"
                 return self.ussd_end(menu_text)
 
 
         else:
-            menu_text = "Invalid Input"
+            menu_text = "Passwords do not Match"
             return self.ussd_end(menu_text)
             # go to home
             #return self.home()
@@ -112,6 +191,12 @@ class RegistrationMenu(Menu):
             return self.get_lastname()
 
         if self.session["level"] == 53:
+            return self.get_password()
+
+        if self.session["level"] == 54:
+            return self.get_verify_password()
+
+        if self.session["level"] == 55:
             return self.send_message()
 
 

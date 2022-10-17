@@ -16,11 +16,11 @@ class send_sms():
         
         #TODO: Send message
 
-    def sending(self, phone_number):
+    def sending(self, phone_number, first_name, id):
         # Set the numbers in international format
         recipients = [phone_number]
         # Set your message
-        message = "You have successfully registered for 1Gov mobile services.";
+        message = f"Hello {first_name} you have successfully registered on the 1Gov plartform, your 1Gov Username is {id}.";
         # Set your shortCode or senderId
         sender = "1GOV"
         try:
