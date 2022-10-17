@@ -59,25 +59,25 @@ def validate_password(password):
 
     menu_text = ""
     if (len(password)<8):
-        menu_text = "NB: Your password must be eight characters long \n Enter your password"
+        menu_text = "NB: Your password must be eight characters long \n Enter your password:"
         
     elif re.search(r'[!@#$%&]', password) is None:
-        menu_text = "NB: Your password must contain atleast one special symbol \n Enter your password"
+        menu_text = "NB: Your password must contain atleast one special symbol \n Enter your password:"
         
     elif re.search(r'\d', password) is None:
-        menu_text = "NB: Your password must contain atleast one digit \n Enter your password"
+        menu_text = "NB: Your password must contain atleast one digit \n Enter your password:"
     
     elif re.search(r'[A-Z]', password) is None:
-        menu_text = "NB: Your password must contain atleast one capital letter \n Enter your password"
+        menu_text = "NB: Your password must contain atleast one capital letter \n Enter your password:"
         
     elif re.search(r'[a-z]', password) is None:
-        menu_text = "Your password must contain atleast one lowercase letter \n Enter your password"
+        menu_text = "Your password must contain atleast one lowercase letter \n Enter your password:"
         
         
     elif re.match(r'[a-z A-Z 0-9 !@#$%&]{8}', password):
         pattern = re.compile(r'[a-z A-Z 0-9 !@#$%&]{8}')
         result = pattern.match(password)
-        menu_text = "Verify your password"
+        menu_text = "Verify your password:"
         
     else:
         menu_text= "Invalid password"

@@ -77,7 +77,7 @@ class RegistrationMenu(Menu):
         if verify_omang_expiry(self.user_response):
             self.session["idexp"] = self.user_response
 
-            menu_text = "Enter your first name"
+            menu_text = "Enter your first name:"
 
             return self.ussd_proceed(menu_text)
         else:
@@ -92,7 +92,7 @@ class RegistrationMenu(Menu):
 
         if verify_username(self.user_response):
             self.session["fname"] = self.user_response
-            menu_text = "Enter your last name"
+            menu_text = "Enter your last name:"
             return self.ussd_proceed(menu_text)
         else:
             menu_text = "Invalid Input"
@@ -104,7 +104,7 @@ class RegistrationMenu(Menu):
 
         if verify_username(self.user_response) or unique_lastname(self.user_response):
             self.session["lname"] = self.user_response
-            menu_text = "NB: Create a strong password \n Enter your password"
+            menu_text = "NB: Create a strong password \n Enter your password:"
             return self.ussd_proceed(menu_text)
 
         else:
@@ -155,7 +155,7 @@ class RegistrationMenu(Menu):
             if response["message"]:
                 #CREATE PROFILE CODE GOES HERE
                 try:
-                    result = users.create(f'{id}', f'{id}@1gov.bw', f'{user_password}', f'{first_name}')
+                    result = users.create(f'{id}', f'{id}@1gov.bw', f'{first_name}', f'{user_password}')
                     print(result)
                     menu_text = "You have successfully registered, thank you"
                     send_sms().sending(self.phone_number,first_name,id)
