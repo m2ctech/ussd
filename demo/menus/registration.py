@@ -23,9 +23,10 @@ head = {'X-Appwrite-Project': project, 'X-Appwrite-key':key}
 
 client = Client()
 account = Account(client)
+users = Users(client)
 
 (client
-  .set_endpoint('https://crmportal.gov.bw/v1/account') # Your API Endpoint
+  .set_endpoint('https://crmportal.gov.bw/v1/users') # Your API Endpoint
   .set_project('6228825d967b029b65cb') # Your project ID
   .set_key('ebf9fcc6cc0e5723fe3d2f795337ba0398577fdc2c56e28c7144ddce40f5e9850a9df1d45e112a845debc6e0801422451a8b5279d05160bc789c8571a3d4ad6a9f2649a2331d6efbd79d87dcf5148c4cc8a922ded779eaced41c15099824897af40e936cc1d233c3eed4a78c187f60f8bcb5e6364e6be68dab85312560897730') # Your secret API key
 )
@@ -123,7 +124,7 @@ class RegistrationMenu(Menu):
             #session
             self.session["level"] = 55
             self.session["password"] = self.user_response
-            return self.send_message()
+            return self.ussd_proceed(menu_text)
 
 
 
@@ -154,7 +155,7 @@ class RegistrationMenu(Menu):
             if response["message"]:
                 #CREATE PROFILE CODE GOES HERE
                 try:
-                    result = account.create(f'{id}', f'{id}@1gov.bw', f'{user_password}')
+                    result = users.create(f'{id}', f'{id}@1gov.bw', f'{user_password}')
                     print(result)
                     menu_text = "You have successfully registered, thank you"
                     send_sms().sending(self.phone_number,first_name,id)

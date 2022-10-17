@@ -77,7 +77,7 @@ def validate_password(password):
     elif re.match(r'[a-z A-Z 0-9 !@#$%&]{8}', password):
         pattern = re.compile(r'[a-z A-Z 0-9 !@#$%&]{8}')
         result = pattern.match(password)
-        print("ACCESS GRANTED!")
+        menu_text = "Verify your password"
         
     else:
         menu_text= "Invalid password"
