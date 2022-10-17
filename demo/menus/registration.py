@@ -55,7 +55,7 @@ class RegistrationMenu(Menu):
                 menu_text = "Already registered"
                 return self.ussd_end(menu_text)
             else:
-                menu_text = "Enter your omang expiry date: yyyy-mm-dd"
+                menu_text = "Enter your omang expiry date: dd-mm-yyyy"
                 return self.ussd_proceed(menu_text)
         else:
             menu_text = "Invalid Input"

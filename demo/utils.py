@@ -38,13 +38,13 @@ def verify_omang_expiry(date):
     if "-" in date:
         date_array = date.split("-")
         if len(date_array) == 3:
-            if len(date_array[0])==4 and date_array[0].isnumeric():
+            if len(date_array[0])==2 and date_array[0].isnumeric():
                 check_value += 1
 
             if len(date_array[1])==2 and date_array[1].isnumeric():
                 check_value += 1
     
-            if len(date_array[2])==2 and date_array[2].isnumeric():
+            if len(date_array[2])==4 and date_array[2].isnumeric():
                 check_value += 1
             return True if check_value == 3 else False
         else:
@@ -59,19 +59,19 @@ def validate_password(password):
 
     menu_text = ""
     if (len(password)<8):
-        menu_text = "NB: The password must be eight characters long"
+        menu_text = "NB: Your password must be eight characters long \n Enter your password"
         
     elif re.search(r'[!@#$%&]', password) is None:
-        menu_text = "NB: password must contain atleast one special symbol"
+        menu_text = "NB: Your password must contain atleast one special symbol \n Enter your password"
         
     elif re.search(r'\d', password) is None:
-        print("NB: password must contain atleast one digit")
+        menu_text = "NB: Your password must contain atleast one digit \n Enter your password"
     
     elif re.search(r'[A-Z]', password) is None:
-        menu_text = "NB: password must contain atleast one capital letter"
+        menu_text = "NB: Your password must contain atleast one capital letter \n Enter your password"
         
     elif re.search(r'[a-z]', password) is None:
-        menu_text = "password must contain atleast one lowercase letter"
+        menu_text = "Your password must contain atleast one lowercase letter \n Enter your password"
         
         
     elif re.match(r'[a-z A-Z 0-9 !@#$%&]{8}', password):
