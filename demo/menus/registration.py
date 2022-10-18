@@ -190,7 +190,7 @@ class RegistrationMenu(Menu):
                 #CREATE PROFILE CODE GOES HERE
                 profile_payload = response["payload"]
                 #profile_data = json.loads(profile_payload)
-                
+                return self.ussd_end(f"{profile_payload}")
                 #Extract data
                 date_of_birth = profile_payload["BIRTH_DTE"]
                 gender_data = profile_payload["SEX"]
