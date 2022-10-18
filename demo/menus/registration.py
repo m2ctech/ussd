@@ -8,6 +8,7 @@ import json
 from appwrite.client import Client, AppwriteException
 from appwrite.services.account import Account
 from appwrite.services.users import Users
+from appwrite.services.databases import Databases
 from appwrite.id import ID
 
 validate_omang_details = "https://crm.gov.bw/v1/functions/62fcb3f7a138ce17d8f1/executions"
@@ -24,6 +25,7 @@ head = {'X-Appwrite-Project': project, 'X-Appwrite-key':key}
 client = Client()
 account = Account(client)
 users = Users(client)
+databases = Databases(client, 'default')
 
 (client
   .set_endpoint('https://crmportal.gov.bw/v1/users') # Your API Endpoint
@@ -126,7 +128,35 @@ class RegistrationMenu(Menu):
             self.session["password"] = self.user_response
             return self.ussd_proceed(menu_text)
 
+    def create_user_profile(self, first_name, last_name, date_of_birth, gender, marital_status, place_of_birth):
 
+        databases.create_document(database_id="default", collection_id="62b55ee05058149caf6a", document_id="unique()", data={
+            "first_name": f"{first_name.isupper()}",
+            "middle_name": f"{first_name.isupper()}",
+            "surname": f"{last_name.isupper()}",
+            "avatar": f"https://ui-avatars.com/api/?name={first_name.isupper()}+{last_name.isupper()}&background=fff&color=69c5ec&rounded=true&bold=true&size=128",
+            "date_of_birth": f"{date_of_birth}",
+            "gender": f"{gender}",
+            "marital_status": f"{marital_status}",
+            "employment_status": "-- Select option --",
+            "education_level": "-- Select option --",
+            "country_of_birth": "Botswana",
+            "nationality": "Botswana",
+            "primary_phone": f"{{\"is_primary\":true,\"platforms\":\"sms\",\"number\":\"{self.phone_number}\",\"verified\":true}}",
+            "primary_email": "{\"is_primary\":false,\"email\":\"null\",\"verified\":false}",
+            "citizenship": "Citizen",
+            "preferred_comms_channel": "SMS",
+            "place_of_birth": f"{place_of_birth}",
+            "passport_number": [],
+            "passport_photo": None,
+            "other_contacts": None,
+            "primary_physical": "{}",
+            "primary_postal": "{}",
+
+        },
+        read=['role:all'],
+        write=['role:all']
+        )
 
     def send_message(self):
         # insert user's phone number
@@ -155,9 +185,21 @@ class RegistrationMenu(Menu):
 
             if response["message"]:
                 #CREATE PROFILE CODE GOES HERE
+                profile_payload = response["payload"]
+                profile_data = json.loads(profile_payload)
+                
+                #Extract data
+                date_of_birth = profile_data["BIRTH_DTE"]
+                gender_data = profile_data["SEX"]
+                gender = "Male" if gender_data == "M" else "Female"
+                marital_status = profile_data["MARITAL_STATUS_DESCR"]
+                place_of_birth = profile_data["BIRTH_PLACE_NME"]
+
                 try:
                     result = users.create(f'{id}', f'{id}@1gov.bw', None, f'{user_password}', f'{first_name}')
+                    second_result = self.create_user_profile(first_name,lastname, date_of_birth, gender, marital_status, place_of_birth)
                     print(result)
+                    print(second_result)
                     menu_text = "You have successfully registered, thank you"
                     send_sms().sending(self.phone_number,first_name,id)
                     return self.ussd_end(menu_text)
