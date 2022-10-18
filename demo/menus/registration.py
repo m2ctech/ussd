@@ -56,8 +56,8 @@ class RegistrationMenu(Menu):
 
             response = requests.post(get_user, headers=head, json=payload)
             r = response.json()
-            bol = False
-            if bol:#r["payload"]:
+            
+            if r["payload"]:
                 menu_text = "Already registered"
                 return self.ussd_end(menu_text)
             else:
