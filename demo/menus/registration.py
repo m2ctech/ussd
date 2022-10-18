@@ -157,8 +157,7 @@ class RegistrationMenu(Menu):
             "primary_postal": "{}",
 
         },
-        read=['role:all'],
-        write=['role:all']
+        permissions=None
         )
 
     def send_message(self):
