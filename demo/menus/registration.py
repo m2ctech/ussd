@@ -189,14 +189,14 @@ class RegistrationMenu(Menu):
             if response["message"]:
                 #CREATE PROFILE CODE GOES HERE
                 profile_payload = response["payload"]
-                profile_data = json.loads(profile_payload)
+                #profile_data = json.loads(profile_payload)
                 
                 #Extract data
-                date_of_birth = profile_data["BIRTH_DTE"]
-                gender_data = profile_data["SEX"]
+                date_of_birth = profile_payload["BIRTH_DTE"]
+                gender_data = profile_payload["SEX"]
                 gender = "Male" if gender_data == "M" else "Female"
-                marital_status = profile_data["MARITAL_STATUS_DESCR"]
-                place_of_birth = profile_data["BIRTH_PLACE_NME"]
+                marital_status = profile_payload["MARITAL_STATUS_DESCR"]
+                place_of_birth = profile_payload["BIRTH_PLACE_NME"]
 
                 try:
                     result = users.create(f'{id}', f'{id}@1gov.bw', None, f'{user_password}', f'{first_name}')
