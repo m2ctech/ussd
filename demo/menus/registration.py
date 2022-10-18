@@ -188,11 +188,11 @@ class RegistrationMenu(Menu):
 
             if response["message"]:
                 #CREATE PROFILE CODE GOES HERE
-                profile_payload = response["payload"]
+                profile_payload = response["payload"]['data']
                 #profile_data = json.loads(profile_payload)
-                return self.ussd_end(f"{profile_payload}")
+                
                 #Extract data
-                date_of_birth = profile_payload["BIRTH_DTE"]
+                date_of_birth = profile_payload['BIRTH_DTE']
                 gender_data = profile_payload["SEX"]
                 gender = "Male" if gender_data == "M" else "Female"
                 marital_status = profile_payload["MARITAL_STATUS_DESCR"]
