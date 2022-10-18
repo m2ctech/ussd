@@ -23,9 +23,9 @@ head = {'X-Appwrite-Project': project, 'X-Appwrite-key':key}
 
 
 client = Client()
-account = Account(client)
-users = Users(client)
-databases = Databases(client, 'default')
+#account = Account(client)
+
+
 
 (client
   .set_endpoint('https://crmportal.gov.bw/v1/users') # Your API Endpoint
@@ -33,7 +33,9 @@ databases = Databases(client, 'default')
   .set_key('ebf9fcc6cc0e5723fe3d2f795337ba0398577fdc2c56e28c7144ddce40f5e9850a9df1d45e112a845debc6e0801422451a8b5279d05160bc789c8571a3d4ad6a9f2649a2331d6efbd79d87dcf5148c4cc8a922ded779eaced41c15099824897af40e936cc1d233c3eed4a78c187f60f8bcb5e6364e6be68dab85312560897730') # Your secret API key
 )
 
-
+databases = Databases(client=client)
+users = Users(client)
+database_id = "default"
 
 
 
@@ -142,7 +144,7 @@ class RegistrationMenu(Menu):
             "education_level": "-- Select option --",
             "country_of_birth": "Botswana",
             "nationality": "Botswana",
-            "primary_phone": f"{{\"is_primary\":true,\"platforms\":\"sms\",\"number\":\"{self.phone_number}\",\"verified\":true}}",
+            "primary_phone": f"{{\"is_primary\":true,\"platforms\":\"sms\",\"number\":\"{gender}\",\"verified\":true}}",
             "primary_email": "{\"is_primary\":false,\"email\":\"null\",\"verified\":false}",
             "citizenship": "Citizen",
             "preferred_comms_channel": "SMS",
