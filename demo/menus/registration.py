@@ -134,10 +134,10 @@ class RegistrationMenu(Menu):
     def create_user_profile(self, first_name, last_name, date_of_birth, gender, marital_status, place_of_birth):
 
         databases.create_document(database_id="default", collection_id="62b55ee05058149caf6a", document_id="unique()", data={
-            "first_name": f"{first_name.isupper()}",
-            "middle_name": f"{first_name.isupper()}",
-            "surname": f"{last_name.isupper()}",
-            "avatar": f"https://ui-avatars.com/api/?name={first_name.isupper()}+{last_name.isupper()}&background=fff&color=69c5ec&rounded=true&bold=true&size=128",
+            "first_name": f"{first_name.upper()}",
+            "middle_name": f"{first_name.upper()}",
+            "surname": f"{last_name.upper()}",
+            "avatar": f"https://ui-avatars.com/api/?name={first_name.upper()}+{last_name.upper()}&background=fff&color=69c5ec&rounded=true&bold=true&size=128",
             "date_of_birth": f"{date_of_birth}",
             "gender": f"{gender}",
             "marital_status": f"{marital_status}",

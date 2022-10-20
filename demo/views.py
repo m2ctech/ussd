@@ -12,7 +12,7 @@ import requests
 from .menus.base_menu import Menu
 from .menus.home import LowerLevelMenu
 from .menus.registration import RegistrationMenu
-
+from .menus.noncitizen_registration import NonCitizenMenu
 headers = {"Content-type": "application/json"}
 
 
@@ -37,7 +37,7 @@ def index(request):
     if cache.get(session_id):
       session = cache.get(session_id)
     else:
-      session = {"level":0, "session_id":session_id, "id": "default", "idexp": "default", "fname":"default", "lname":"default", "password":"default"}
+      session = {"level":0, "session_id":session_id, "id": "default", "idexp": "default", "fname":"default", "lname":"default", "password":"default", "passport":"default", "passexp":"default", "gender":"default", "date_of_birth":"default", "place_of_birth":"default", "nationality":"default","country_of_birth":"default"}
       cache.set(session_id, session)
 
     level = session.get("level")
@@ -51,6 +51,12 @@ def index(request):
         menu = RegistrationMenu(session_id=session_id, session=session, phone_number=phone_number,
                        user_response=user_response,level=level)
         return menu.execute()
+
+    if level >= 30:
+        menu = NonCitizenMenu(session_id=session_id, session=session, phone_number=phone_number,
+                       user_response=user_response,level=level)
+        return menu.execute()
+
 
           
     response = ("END nothing here", 200)

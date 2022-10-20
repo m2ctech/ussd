@@ -1,4 +1,5 @@
 
+from ast import Return
 import re
 
 def verify_id(user_id):
@@ -108,3 +109,17 @@ def unique_lastname(lastname):
             
     else:
         return False
+
+def check_gender_input(text):
+     
+    gender = text.isupper()
+
+    if gender == "M" or gender == "MALE":
+        gender = "M"
+    elif gender == "F" or gender == "FEMALE":
+        gender = "F"
+
+    else:
+        gender = "Invalid input"
+
+    return gender
