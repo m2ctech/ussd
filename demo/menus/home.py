@@ -12,7 +12,7 @@ class LowerLevelMenu(Menu):
     def noncitizen_registration(self):  # 2
         menu_text = "Enter your Passport Number:\n"
         self.session['level'] = 30
-        return self.ussd_end(menu_text)
+        return self.ussd_proceed(menu_text)
 
     def login(self):  # 3
         menu_text = "This service is not available yet\n"
