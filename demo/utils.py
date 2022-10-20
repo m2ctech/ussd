@@ -112,7 +112,7 @@ def unique_lastname(lastname):
 
 def check_gender_input(text):
      
-    gender = text.isupper()
+    gender = text.upper()
 
     if gender == "M" or gender == "MALE":
         gender = "M"
