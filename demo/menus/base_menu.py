@@ -45,3 +45,7 @@ class Menu(object):
         
         # print the response on to the page so that our gateway can read it
         return self.ussd_proceed(menu_text)
+
+
+    def __str__(self):
+        return "Base Menu (blueprint)"

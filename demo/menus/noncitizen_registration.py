@@ -1,6 +1,16 @@
 from .base_menu import Menu
 from ..utils import verify_omang_expiry, verify_username, unique_lastname, check_gender_input, validate_password
 from ..send_sms import send_sms
+import requests
+
+
+create_profile_url = "https://crmportal.gov.bw/v1/functions/634e8d215dac82d053ce/executions"
+
+project = "6228825d967b029b65cb"
+key = "3edae4867e4bb64183f83348c3378423cfd31ebeb5e76c0505fc839bf848682f8de6fa434175ead160fe6fe8730bb383b4a468031602755a4fb1818f371da18ad14039de279d2e74558233a3ed7a6aef66ce08394c48af7c23b46017643a33ad4209f1d0de306070c33207072be40e08365247bedc47e23f1235473a6e52075b"
+
+head = {'X-Appwrite-Project': project, 'X-Appwrite-key':key}
+
 
 
 
@@ -13,10 +23,17 @@ class NonCitizenMenu(Menu):
 
         self.session["level"] = 31
         self.session["passport"] = self.user_response
+        passport_number = self.user_response
 
-        menu_text = "Enter your Passport Expiry Date\ndd-mm-yyyy:"
+        if passport_number.isnumeric():
 
-        return self.ussd_proceed(menu_text)
+            menu_text = "Enter your Passport Expiry Date\ndd-mm-yyyy:"
+
+            return self.ussd_proceed(menu_text)
+
+        else:
+            menu_text = "Invalid Input"
+            return self.ussd_end(menu_text)
 
 
     def get_firstname(self):
@@ -161,6 +178,23 @@ class NonCitizenMenu(Menu):
             menu_text = "Passwords do not Match"
             return self.ussd_end(menu_text)
 
+    def create_profile(self, first_name, last_name, passport, date_of_birth, gender, country_of_birth, nationality):
+
+        payload = {
+            "async":False,
+            "data":f"{{\"first_name\":\"{first_name.capitalize()}\",\"middle_name\": \"\",\"surname\": \"{last_name.capitalize()}\",\"username\": \"{passport}\",\"date_of_birth\" : \"{date_of_birth}\",\"gender\" : \"{gender}\",\"avatar\" : \"https://ui-avatars.com/api/?name={first_name.upper()}+{last_name.upper()}&background=fff&color=69c5ec&rounded=true&bold=true&size=128\",\"country_of_birth\":\"{country_of_birth.capitalize()}\",\"nationality\":\"{nationality.capitalize()}\",\"citizenship\":\"Non-Citizen\",\"registration\":\"Passport\"}}"
+        }
+
+
+
+        try:
+            response = requests.post(create_profile_url, headers=head, json=payload)
+
+        except requests.exceptions.HTTPError as e:
+
+            menu_text = f"{response} {e.message}"
+
+            return self.ussd_end(menu_text)
 
 
 
@@ -198,6 +232,9 @@ class NonCitizenMenu(Menu):
 
         elif self.session["level"] == 40:
             return self.send_message()
+
+    def __str__(self):
+        return "Non-Citizen Registration Menu"
 
 
 

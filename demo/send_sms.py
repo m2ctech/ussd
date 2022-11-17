@@ -20,7 +20,7 @@ class send_sms():
         # Set the numbers in international format
         recipients = [phone_number]
         # Set your message
-        message = f"Hello {first_name} you have successfully registered on the 1Gov plartform, your 1Gov Username is {id}.";
+        message = f"Hello {first_name.capitalize()} you have successfully registered on the 1Gov plartform, your 1Gov Username is {id}.";
         # Set your shortCode or senderId
         sender = "1GOV"
         try:

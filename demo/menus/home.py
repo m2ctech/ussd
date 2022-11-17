@@ -16,7 +16,7 @@ class LowerLevelMenu(Menu):
 
     def login(self):  # 3
         menu_text = "This service is not available yet\n"
-        #self.session['level'] = 40
+        self.session['level'] = 10
         return self.ussd_end(menu_text)
 
 
@@ -28,3 +28,6 @@ class LowerLevelMenu(Menu):
             '3': self.login
         }
         return menus.get(self.user_response, self.home)()
+
+    def __str__(self):
+        return "Entry level Menu"
