@@ -195,13 +195,21 @@ class RegistrationMenu(Menu):
                 "async": False,
                 "data": f"{{\"user_id\":\"{id}\",\"expiry_date\":\"{id_exp}\",\"surname\":\"{lastname}\",\"firstname\":\"{first_name}\"}}"
             }
+            ###try response
+            try:
+                response = requests.post(validate_omang_details, headers=head, json=payload)
+                
+                r = response.json()
 
-            response = requests.post(validate_omang_details, headers=head, json=payload)
-            
-            r = response.json()
+                data = r["response"]
+                response = json.loads(data)
 
-            data = r["response"]
-            response = json.loads(data)
+            except AppwriteException as e:
+                print(e.message)
+                menu_text = e.message
+                return self.ussd_end(menu_text)
+
+
 
 
             if response["message"]:
