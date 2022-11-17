@@ -204,11 +204,11 @@ class RegistrationMenu(Menu):
                 data = r["response"]
                 response = json.loads(data)
 
-            except AppwriteException as e:
-                print(e.message)
-                menu_text = e.message
-                return self.ussd_end(menu_text)
+            except requests.exceptions.HTTPError as e:
 
+                menu_text = f"{response} {e.message}"
+
+                return self.ussd_end(menu_text)
 
 
 
